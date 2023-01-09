@@ -4,22 +4,27 @@ const Header = (props) => {
     props.course
   )
 };
+
 // renders the parts and their number of exercises
-const Content= (props) => {
+const Part = (props) => {
   return(
-    <>
-      <p>
-        {props.part1} {props.exercises1}
+    <p>
+        {props.part} {props.exercises}
       </p>
-      <p>
-        {props.part2} {props.exercises2}
-      </p>
-      <p>
-        {props.part3} {props.exercises3}
-      </p>
-    </>
   )
 };
+
+// renders the part components
+const Content= (props) => {
+  return(
+    <div>
+      <Part part = {props.part1} exercises = {props.exercises1} />
+      <Part part = {props.part2} exercises = {props.exercises2} />
+      <Part part = {props.part3} exercises = {props.exercises3} />
+    </div>
+  )
+};
+
 // renders the total number of exercises
 const Total= (props) => {
   return(
