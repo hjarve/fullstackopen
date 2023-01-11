@@ -10,7 +10,7 @@ const Button = ({onClick, text}) => {
   )
 };
 
-const Statistic = ({text, statNum}) => <p>{text} {statNum}</p>
+const Statistic = ({text1, statNum, text2}) => <p>{text1} {statNum} {text2}</p>
 
 const App = () => {
   // save clicks of each button to its own state
@@ -26,6 +26,10 @@ const App = () => {
   const increaseNeutral = () => setNeutral(neutral + 1);
   const increaseBad = () => setBad(bad + 1);
 
+  const countTotal = () => good + neutral + bad;
+  const countAverage = () => (good - bad) / countTotal();
+  const positiveProportion = () => (good / countTotal()) * 100;
+
   return (
     <div>
       <Header text={'Give feedback'} />
@@ -33,9 +37,12 @@ const App = () => {
       <Button onClick={increaseNeutral} text = {neutralText} />
       <Button onClick={increaseBad} text = {badText} />
       <Header text={'Statistics'} />
-      <Statistic text={goodText} statNum = {good} />
-      <Statistic text={neutralText} statNum = {neutral} />
-      <Statistic text={badText} statNum = {bad} />
+      <Statistic text1={goodText} statNum={good} />
+      <Statistic text1={neutralText} statNum={neutral} />
+      <Statistic text1={badText} statNum={bad} />
+      <Statistic text1={'all'} statNum={countTotal()} />
+      <Statistic text1={'average'} statNum={countAverage()} />
+      <Statistic text1={'positive'} statNum={positiveProportion()} text2={'%'} />
     </div>
   )
 };
