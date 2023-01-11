@@ -10,21 +10,21 @@ const Button = ({onClick, text}) => {
   )
 };
 
-const StatisticLine = ({text1, statNum, text2}) => <p>{text1} {statNum} {text2}</p>
+const StatisticLine = ({text1, statNum, text2}) => <tr><td>{text1}</td><td>{statNum} {text2}</td></tr>
 
 const Statistics = (props) => {
   if(props.totalNum == 0) {
     return <p>No feedback given</p>
   } else {
     return(
-      <div>
+      <table>
         <StatisticLine text1={props.goodText} statNum={props.goodNum} />
         <StatisticLine text1={props.neutralText} statNum={props.neutralNum} />
         <StatisticLine text1={props.badText} statNum={props.badNum} />
         <StatisticLine text1={'all'} statNum={props.totalNum} />
         <StatisticLine text1={'average'} statNum={props.averageNum} />
         <StatisticLine text1={'positive'} statNum={props.positiveProp} text2={'%'} />
-      </div>
+      </table>
     )
   }
 };
