@@ -12,6 +12,19 @@ const Button = ({onClick, text}) => {
 
 const Statistic = ({text1, statNum, text2}) => <p>{text1} {statNum} {text2}</p>
 
+const Statistics = (props) => {
+  return(
+    <div>
+      <Statistic text1={props.goodText} statNum={props.goodNum} />
+      <Statistic text1={props.neutralText} statNum={props.neutralNum} />
+      <Statistic text1={props.badText} statNum={props.badNum} />
+      <Statistic text1={'all'} statNum={props.totalNum} />
+      <Statistic text1={'average'} statNum={props.averageNum} />
+      <Statistic text1={'positive'} statNum={props.positiveProp} text2={'%'} />
+    </div>
+  )
+};
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -22,10 +35,12 @@ const App = () => {
   const neutralText = 'neutral';
   const badText = 'bad';
 
+  // functions to record the number of clicks for each option
   const increaseGood = () => setGood(good +1);
   const increaseNeutral = () => setNeutral(neutral + 1);
   const increaseBad = () => setBad(bad + 1);
 
+  // functions to calculate statistics
   const countTotal = () => good + neutral + bad;
   const countAverage = () => (good - bad) / countTotal();
   const positiveProportion = () => (good / countTotal()) * 100;
@@ -37,12 +52,8 @@ const App = () => {
       <Button onClick={increaseNeutral} text = {neutralText} />
       <Button onClick={increaseBad} text = {badText} />
       <Header text={'Statistics'} />
-      <Statistic text1={goodText} statNum={good} />
-      <Statistic text1={neutralText} statNum={neutral} />
-      <Statistic text1={badText} statNum={bad} />
-      <Statistic text1={'all'} statNum={countTotal()} />
-      <Statistic text1={'average'} statNum={countAverage()} />
-      <Statistic text1={'positive'} statNum={positiveProportion()} text2={'%'} />
+      <Statistics goodText={goodText} goodNum = {good} neutralText={neutralText} neutralNum={neutral}
+        badText={badText} badNum={bad} totalNum={countTotal()} averageNum={countAverage()} positiveProp={positiveProportion()}/>
     </div>
   )
 };
