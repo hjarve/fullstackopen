@@ -13,16 +13,20 @@ const Button = ({onClick, text}) => {
 const Statistic = ({text1, statNum, text2}) => <p>{text1} {statNum} {text2}</p>
 
 const Statistics = (props) => {
-  return(
-    <div>
-      <Statistic text1={props.goodText} statNum={props.goodNum} />
-      <Statistic text1={props.neutralText} statNum={props.neutralNum} />
-      <Statistic text1={props.badText} statNum={props.badNum} />
-      <Statistic text1={'all'} statNum={props.totalNum} />
-      <Statistic text1={'average'} statNum={props.averageNum} />
-      <Statistic text1={'positive'} statNum={props.positiveProp} text2={'%'} />
-    </div>
-  )
+  if(props.totalNum == 0) {
+    return <p>No feedback given</p>
+  } else {
+    return(
+      <div>
+        <Statistic text1={props.goodText} statNum={props.goodNum} />
+        <Statistic text1={props.neutralText} statNum={props.neutralNum} />
+        <Statistic text1={props.badText} statNum={props.badNum} />
+        <Statistic text1={'all'} statNum={props.totalNum} />
+        <Statistic text1={'average'} statNum={props.averageNum} />
+        <Statistic text1={'positive'} statNum={props.positiveProp} text2={'%'} />
+      </div>
+    )
+  }
 };
 
 const App = () => {
