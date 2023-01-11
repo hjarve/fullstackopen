@@ -21,7 +21,8 @@ const App = () => {
 
   // set a random anecdote from the array to be selected
   const drawAnecdote = () => setSelected(Math.floor(Math.random() * 7));
-  // update points for the displayed anecdote and check which one has the most votes
+
+  // update points for the displayed anecdote and check if it has more votes that the current most votes
   const vote = () => {
     const copy = [...points];
     copy[selected] += 1;
@@ -29,21 +30,9 @@ const App = () => {
     if (copy[selected] > points[mostVotes]){
       setMostVotes(selected);
     }
-  }
-
-  /*    let index = 0;
-    let maxPoints = 0;
-    for(let i = 0; i < points.length; i++){
-      if(points[i] > maxPoints){
-        index = i;
-        maxPoints = points[i];
-      }
-    }
-    setMostVotes(index);
-    */
+  };
 
   
-
   return (
     <div>
       <Header text={'Anecdote of the day'} />
