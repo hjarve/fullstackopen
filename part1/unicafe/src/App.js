@@ -10,7 +10,7 @@ const Button = ({onClick, text}) => {
   )
 };
 
-const Statistic = ({text1, statNum, text2}) => <p>{text1} {statNum} {text2}</p>
+const StatisticLine = ({text1, statNum, text2}) => <p>{text1} {statNum} {text2}</p>
 
 const Statistics = (props) => {
   if(props.totalNum == 0) {
@@ -18,12 +18,12 @@ const Statistics = (props) => {
   } else {
     return(
       <div>
-        <Statistic text1={props.goodText} statNum={props.goodNum} />
-        <Statistic text1={props.neutralText} statNum={props.neutralNum} />
-        <Statistic text1={props.badText} statNum={props.badNum} />
-        <Statistic text1={'all'} statNum={props.totalNum} />
-        <Statistic text1={'average'} statNum={props.averageNum} />
-        <Statistic text1={'positive'} statNum={props.positiveProp} text2={'%'} />
+        <StatisticLine text1={props.goodText} statNum={props.goodNum} />
+        <StatisticLine text1={props.neutralText} statNum={props.neutralNum} />
+        <StatisticLine text1={props.badText} statNum={props.badNum} />
+        <StatisticLine text1={'all'} statNum={props.totalNum} />
+        <StatisticLine text1={'average'} statNum={props.averageNum} />
+        <StatisticLine text1={'positive'} statNum={props.positiveProp} text2={'%'} />
       </div>
     )
   }
