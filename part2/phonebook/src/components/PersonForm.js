@@ -1,4 +1,4 @@
-// fomr to add new person and their number to the phonebook
+// form to add new person and their number to the phonebook
 const PersonForm = (props) => {
     return(
       <form onSubmit={props.addPerson}>
