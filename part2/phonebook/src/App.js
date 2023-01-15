@@ -21,11 +21,19 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    // check if the name is already added and prevent duplicates
-    if (persons.findIndex(element => element.name === newName)>=0){
-      window.alert(`${newName} is already added to phonebook`);
-      setNewName('');
-      setNewNumber('');
+    const updatePerson = persons.find(element => element.name === newName);
+   // if name is already added, ask if number should be changed 
+    if(updatePerson){
+      if(window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
+        const changedPerson = {...updatePerson, number: newNumber};
+        personsService
+          .update(changedPerson.id, changedPerson)
+          .then(returnedPerson =>{
+            setPersons(persons.map(person => person.id !== changedPerson.id ? person : changedPerson))
+          })
+        setNewName('');
+        setNewNumber('');    
+      }
     } else {
       const personObject = {
         name: newName,
