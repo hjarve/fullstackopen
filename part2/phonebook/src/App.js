@@ -40,8 +40,12 @@ const App = () => {
           setNewName('');
           setNewNumber('');
         })
-
     } 
+  };
+
+  const removePerson = (id) => {
+    personsService.remove(id)
+    setPersons(persons.filter(person => person.id !== id))
   };
 
   const handleNameChange = (event) => setNewName(event.target.value);
@@ -56,7 +60,7 @@ const App = () => {
       <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} 
       newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filterString={filterString}/>
+      <Persons persons={persons} filterString={filterString} removePerson={removePerson}/>
     </div>
   )
 };
