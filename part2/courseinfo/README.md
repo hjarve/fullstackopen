@@ -1,3 +1,6 @@
+# App that shows a list of courses
+Frontend only
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

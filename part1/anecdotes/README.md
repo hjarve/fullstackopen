@@ -1,3 +1,7 @@
+# App for showing anecdotes in randomized order
+Anecdotes can be voted, and the anecdote with the most votes is also showed 
+Frontend only
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

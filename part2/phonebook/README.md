@@ -1,3 +1,13 @@
+# Phonebook app (with json-server)
+Shows a list of people added to the phonebook
+People can be filtered by their name
+New people can be added to the phonebook
+People can be deleted from the phonebook, there will be a confirmation window before deleting
+If the same person is added again, there will be a window to confirm if the person should be updated with the new phonenumber
+
+### To run the json-server:
+npm run server
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

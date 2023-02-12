@@ -1,3 +1,10 @@
+# App to show countries
+There is an input for filtering countries.
+If there are more than 10 countries containing the filtering string, the app asks to put more characters.
+If there are 2-10 matching countries, the countries are listed with buttons to show the information of the chosen country.
+If there is only one country matching the filtering string, the information of that country is showed.
+The data of countries is gotten from API https://restcountries.com/ 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
