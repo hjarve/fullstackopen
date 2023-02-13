@@ -1,9 +1,9 @@
 # Phonebook app (with json-server)
-Shows a list of people added to the phonebook.
-People can be filtered by their name.
+Shows a list of people added to the phonebook app.
+People can be filtered by their names.
 New people can be added to the phonebook.
-People can be deleted from the phonebook, there will be a confirmation window before deleting.
-If the same person is added again, there will be a window to confirm if the person should be updated with the new phonenumber.
+People can be deleted from the phonebook, and there will be a confirmation window before deleting.
+If the same person is added again, there will be a window to confirm whether the person should be updated with the new phonenumber or not.
 
 ### To run the json-server:
 ### `npm run server`
