@@ -1,5 +1,5 @@
 # App for showing anecdotes in randomized order
-Anecdotes can be voted, and the anecdote with the most votes is also showed 
+Anecdotes can be voted, and the anecdote with the most votes is also showed. 
 Frontend only
 
 # Getting Started with Create React App
