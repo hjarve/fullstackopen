@@ -4,6 +4,7 @@ People can be filtered by their names.
 New people can be added to the phonebook.
 People can be deleted from the phonebook, and there will be a confirmation window before deleting.
 If the same person is added again, there will be a window to confirm whether the person should be updated with the new phonenumber or not.
+The app stores the data to json-server.
 
 ### To run the json-server:
 ### `npm run server`
