@@ -6,7 +6,7 @@ People can be deleted from the phonebook, there will be a confirmation window be
 If the same person is added again, there will be a window to confirm if the person should be updated with the new phonenumber.
 
 ### To run the json-server:
-npm run server
+### `npm run server`
 
 # Getting Started with Create React App
 
