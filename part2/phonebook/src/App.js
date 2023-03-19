@@ -22,6 +22,15 @@ const App = () => {
     })
   }, []);
 
+  const showMessage = (message, success) => {
+    setMessage(message);
+            setSuccessfulMessage(success);
+            setTimeout(() => {
+              setMessage(null)
+              setSuccessfulMessage(null);
+            }, 4000);
+  }
+
   const addPerson = (event) => {
     event.preventDefault();
     const updatePerson = persons.find(element => element.name === newName);
@@ -29,27 +38,22 @@ const App = () => {
     if(updatePerson){
       if(window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
         const changedPerson = {...updatePerson, number: newNumber};
-        console.log(`changedPerson: ${changedPerson}`);
-        console.log(changedPerson)
         personsService
           .update(changedPerson.id, changedPerson)
           .then(returnedPerson =>{
+            if(!returnedPerson.status === '404'){
+              console.log('status code is 404:');
+              console.log(returnedPerson.status);
+            }
             setPersons(persons.map(person => person.id !== changedPerson.id ? person : changedPerson))
-            setMessage(`The phone number of ${returnedPerson.name} was changed`);
-            setSuccessfulMessage(1);
-            setTimeout(() => {
-              setMessage(null)
-              setSuccessfulMessage(null);
-            }, 4000);
+            showMessage(`The phone number of ${returnedPerson.name} was changed`, 1);
           }).catch(error => {
-            console.log(error);
-            setMessage(`Information of ${updatePerson.name} has already been removed from server`);
-            setSuccessfulMessage(0);
-            setPersons(persons.filter(person => person.id !== updatePerson.id))
-            setTimeout(() => {
-              setMessage(null)
-              setSuccessfulMessage(null);
-            }, 4000);
+            if(error.response.status === 404){
+              showMessage(`Information of ${updatePerson.name} has already been removed from server`, 0);
+              setPersons(persons.filter(person => person.id !== updatePerson.id));
+            }else {
+              showMessage(error.response.data.error, 0);
+            }
           })
         setNewName('');
         setNewNumber('');
@@ -65,31 +69,21 @@ const App = () => {
       personsService
         .create(personObject)
         .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
+          setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
-          setMessage(`Added ${returnedPerson.name}`);
-          setSuccessfulMessage(1);
-          setTimeout(() => {
-            setMessage(null)
-            setSuccessfulMessage(null);
-          }, 4000);
+          showMessage(`Added ${returnedPerson.name}`, 1);
         })
         .catch(error => {
           console.log(error.response.data.error);
-          setMessage(error.response.data.error);
-          setSuccessfulMessage(0);
-          setTimeout(() => {
-            setMessage(null)
-            setSuccessfulMessage(null);
-          }, 4000);
+          showMessage(error.response.data.error, 0);
         })
     } 
   };
 
   const removePerson = (id) => {
-    personsService.remove(id)
-    setPersons(persons.filter(person => person.id !== id))
+    personsService.remove(id);
+    setPersons(persons.filter(person => person.id !== id));
   };
 
   const handleNameChange = (event) => setNewName(event.target.value);
