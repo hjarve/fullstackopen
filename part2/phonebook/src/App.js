@@ -29,6 +29,8 @@ const App = () => {
     if(updatePerson){
       if(window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
         const changedPerson = {...updatePerson, number: newNumber};
+        console.log(`changedPerson: ${changedPerson}`);
+        console.log(changedPerson)
         personsService
           .update(changedPerson.id, changedPerson)
           .then(returnedPerson =>{
@@ -40,6 +42,7 @@ const App = () => {
               setSuccessfulMessage(null);
             }, 4000);
           }).catch(error => {
+            console.log(error);
             setMessage(`Information of ${updatePerson.name} has already been removed from server`);
             setSuccessfulMessage(0);
             setPersons(persons.filter(person => person.id !== updatePerson.id))
