@@ -75,6 +75,15 @@ const App = () => {
             setSuccessfulMessage(null);
           }, 4000);
         })
+        .catch(error => {
+          console.log(error.response.data.error);
+          setMessage(error.response.data.error);
+          setSuccessfulMessage(0);
+          setTimeout(() => {
+            setMessage(null)
+            setSuccessfulMessage(null);
+          }, 4000);
+        })
     } 
   };
 
