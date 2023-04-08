@@ -3,27 +3,14 @@ const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 const Blog = require('../models/blog');
+const helper = require('./test_helper');
 
-const initialBlogs = [
-    {
-        title: "React patterns",
-        author: "Michael Chan",
-        url: "https://reactpatterns.com/",
-        likes: 7,
-      },
-      {
-        title: "Go To Statement Considered Harmful",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-        likes: 5,
-      },
-]
 
 beforeEach(async () => {
     await Blog.deleteMany({});
-    let blogObject = new Blog(initialBlogs[0]);
+    let blogObject = new Blog(helper.initialBlogs[0]);
     await blogObject.save();
-    blogObject = new Blog(initialBlogs[1]);
+    blogObject = new Blog(helper.initialBlogs[1]);
     await blogObject.save();
 }, 100000)
 
@@ -32,7 +19,7 @@ test('2 blogs are returned as json', async () => {
     const response = await api.get('/api/blogs')
     expect(200)
     expect(response.headers['content-type']).toMatch(/json/)
-    expect(response.body).toHaveLength(initialBlogs.length)
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
 }, 100000)
 
 test('Unique identifier is named id', async () => {
@@ -54,10 +41,9 @@ test('a blog can be added', async () => {
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
-    const contents = response.body.map(blog => blog.title)
-
-    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    const blogsAtTheEnd = await helper.blogsInDb();
+    expect(blogsAtTheEnd).toHaveLength(helper.initialBlogs.length + 1)
+    const contents = blogsAtTheEnd.map(blog => blog.title)
     expect(contents).toContain('Canonical string reduction')
 }, 100000)
 
@@ -74,9 +60,9 @@ test('default value for likes is zero', async () => {
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
-    const content = response.body.filter(blog => blog.title === 'First class tests')
-
+    const blogsAtTheEnd = await helper.blogsInDb();
+    const content = blogsAtTheEnd.filter(blog => blog.title === 'First class tests')
+    
     expect(content[0].likes).toBe(0)
 }, 100000)
 
