@@ -14,7 +14,11 @@ dotenv library
 
 lodash library: JS library to work with arrays 
 
+express-async-errors: the library allows to eliminate the try-catch blocks.
+
 
 ## dev dependency: 
 nodemon: nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.
 jest: unit testing
+cross-env: makes mode specification of the app to work on Windows (cross-platform compatibility)
+supertest: package that helps to write tests for testing the API
