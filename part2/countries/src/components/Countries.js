@@ -1,3 +1,6 @@
+
+import Weather from "./Weather";
+
 const Language = ({language}) => <li>{language}</li>
 
 const Languages = ({languages}) => {
@@ -8,16 +11,22 @@ const Languages = ({languages}) => {
   );
 }
 
-const Country = ({country}) => {
-  return(
+const Country = ({country, weatherData}) => {
+  if(country){
+    return(
     <div>
       <h2>{country.name}</h2>
-      <p>capital {country.capital}</p>
-      <p>area {country.area}</p>
+      <p>capital: {country.capital}</p>
+      <p>area: {country.area}</p>
       <h3>languages: </h3>
       <Languages languages={country.languages} />
+      <img src={country.flag.png} alt={country.flag.alt}/>
+      <Weather country={country} weatherData={weatherData}/>
     </div>
   )
+  } else {
+    return null;
+  }
 };
 
 
@@ -38,13 +47,12 @@ const CountryNames = ({countries, setFilterString}) => {
   )
 }
 
-const Countries = ({countries, filterString, setFilterString}) => {
+const Countries = ({countries, countriesToShow, country, setFilterString, weatherData}) => {
   if (countries.length < 1) {
     return (<p>Loading countries...</p>)
   } else {
-    const countriesToShow = countries.filter(country => country.name.toLowerCase().includes(filterString.toLowerCase()));
     if(countriesToShow.length === 1){
-      return <Country key={countriesToShow.id} country={countriesToShow[0]}/>
+      return <Country country={country} weatherData={weatherData}/>
     } else if (countriesToShow.length <= 10) {
       return(
         <CountryNames countries={countriesToShow} setFilterString={setFilterString} />
