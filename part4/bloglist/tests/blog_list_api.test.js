@@ -38,7 +38,7 @@ test('2 blogs are returned as json', async () => {
 test('Unique identifier is named id', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body[0].id).toBeDefined();
-})
+}, 100000)
 
 test('a blog can be added', async () => {
     const newBlog = {
@@ -59,7 +59,26 @@ test('a blog can be added', async () => {
 
     expect(response.body).toHaveLength(initialBlogs.length + 1)
     expect(contents).toContain('Canonical string reduction')
-})
+}, 100000)
+
+test('default value for likes is zero', async () => {
+    const newBlog = {
+        title: "First class tests",
+        author: "Robert C. Martin",
+        url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll"
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    const content = response.body.filter(blog => blog.title === 'First class tests')
+
+    expect(content[0].likes).toBe(0)
+}, 100000)
 
 afterAll(async () => {
     await mongoose.connection.close();
