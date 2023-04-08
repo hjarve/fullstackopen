@@ -80,6 +80,32 @@ test('default value for likes is zero', async () => {
     expect(content[0].likes).toBe(0)
 }, 100000)
 
+test('missing title returns 400 Bad Request', async () => {
+    const newBlog = {
+        author: "Edsger W. Dijkstra",
+        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+        likes: 12
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+})
+
+test('missing url returns 400 Bad Request', async () => {
+    const newBlog = {
+        title: "Canonical string reduction",
+        author: "Edsger W. Dijkstra",
+        likes: 12
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+})
+
 afterAll(async () => {
     await mongoose.connection.close();
 }, 100000)
