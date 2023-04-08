@@ -45,8 +45,8 @@ describe('adding a new blog', () => {
 
         const blogsAtTheEnd = await helper.blogsInDb();
         expect(blogsAtTheEnd).toHaveLength(helper.initialBlogs.length + 1)
-        const contents = blogsAtTheEnd.map(blog => blog.title)
-        expect(contents).toContain('Canonical string reduction')
+        const titles = blogsAtTheEnd.map(blog => blog.title)
+        expect(titles).toContain('Canonical string reduction')
     }, 100000)
 
     test('without likes prperty succeeds with a default value zero', async () => {
@@ -63,9 +63,9 @@ describe('adding a new blog', () => {
             .expect('Content-Type', /application\/json/)
 
         const blogsAtTheEnd = await helper.blogsInDb();
-        const content = blogsAtTheEnd.filter(blog => blog.title === 'First class tests')
+        const title = blogsAtTheEnd.filter(blog => blog.title === 'First class tests')
         
-        expect(content[0].likes).toBe(0)
+        expect(title[0].likes).toBe(0)
     }, 100000)
 
     test('fails with a status code 400 Bad Request if title is missing', async () => {
@@ -95,6 +95,24 @@ describe('adding a new blog', () => {
     })
 })
 
+describe('deleting a blog', () => {
+    test('succeeds with a statis code 204 if id is valid', async () => {
+        const blogAtStart = await helper.blogsInDb();
+        const blogToDelete = blogAtStart[0];
+        console.log(blogToDelete.id);
+
+        await api
+            .delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
+
+        const blogsAtTheEnd = await helper.blogsInDb();
+
+        expect(blogsAtTheEnd).toHaveLength(helper.initialBlogs.length - 1);
+
+        const titles = blogsAtTheEnd.map(blog => blog.title)
+        expect(titles).not.toContain(blogToDelete.title);
+    })
+})
 
 afterAll(async () => {
     await mongoose.connection.close();
