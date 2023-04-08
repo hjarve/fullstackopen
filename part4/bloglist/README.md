@@ -12,6 +12,9 @@ mongoose: library that offers a higher-level API. Mongoose could be described as
 
 dotenv library
 
+lodash library: JS library to work with arrays 
+
 
 ## dev dependency: 
 nodemon: nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.
+jest: unit testing
