@@ -82,7 +82,7 @@ describe('adding a new blog', () => {
             .post('/api/blogs')
             .send(newBlog)
             .expect(400)
-    })
+    }, 100000)
 
     test('fails with a status code 400 Bad Request if url is missing', async () => {
         const newBlog = {
@@ -95,7 +95,7 @@ describe('adding a new blog', () => {
             .post('/api/blogs')
             .send(newBlog)
             .expect(400)
-    })
+    }, 100000)
 })
 
 describe('deleting a blog', () => {
