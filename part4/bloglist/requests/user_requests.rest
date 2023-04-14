@@ -18,5 +18,44 @@ Content-Type: application/json
     "password": "sanasana"
 }
 
+### create a user with already existing username
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "uusikäyttäjäx",
+    "name": "Uusi Käyttäjä X",
+    "password": "sanasana"
+}
+
+### create a user with a too short username
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "äx",
+    "name": "Uusi Käyttäjä X",
+    "password": "sanasana"
+}
+
+### create a user without password
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "uusikäyttäjäx",
+    "name": "Uusi Käyttäjä X"
+}
+
+### create a user with too short password
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "uusikäyttäjäx",
+    "name": "Uusi Käyttäjä X",
+    "password": "sa"
+}
+
 ### get all users
 GET http://localhost:3003/api/users 

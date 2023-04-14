@@ -7,6 +7,7 @@ const helper = require('./test_helper');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const { before } = require('lodash');
+const { error } = require('../utils/logger');
 
 
 beforeEach(async () => {
@@ -180,11 +181,13 @@ describe('when there is initially one user in the DB', () => {
             password: 'sanasana'
         }
 
-        await api
+        const response = await api
             .post('/api/users')
             .send(newUser)
             .expect(400)
             .expect('Content-Type', /application\/json/)
+
+        expect(response.text).toMatch(/`username` is required/)
 
         const usersAtEnd = await helper.usersInDb();
         expect(usersAtEnd).toHaveLength(usersAtStart.length);
@@ -199,11 +202,13 @@ describe('when there is initially one user in the DB', () => {
             password: 'sanasana'
         }
 
-        await api
+        const respons = await api
             .post('/api/users')
             .send(newUser)
             .expect(400)
             .expect('Content-Type', /application\/json/)
+
+        expect(respons.text).toMatch(/is shorter than the minimum allowed length/);
 
         const usersAtEnd = await helper.usersInDb();
         expect(usersAtEnd).toHaveLength(usersAtStart.length);
@@ -218,11 +223,13 @@ describe('when there is initially one user in the DB', () => {
             password: 'sanasana'
         }
 
-        await api
+        const respons = await api
             .post('/api/users')
             .send(newUser)
             .expect(400)
             .expect('Content-Type', /application\/json/)
+
+        expect(respons.text).toMatch(/`username` to be unique/);
 
         const usersAtEnd = await helper.usersInDb();
         expect(usersAtEnd).toHaveLength(usersAtStart.length);
@@ -236,11 +243,13 @@ describe('when there is initially one user in the DB', () => {
             name: 'Uusi Käyttäjä',
         }
 
-        await api
+        const respons = await api
             .post('/api/users')
             .send(newUser)
             .expect(400)
             .expect('Content-Type', /application\/json/)
+
+        expect(respons.text).toMatch(/password missing/);
 
         const usersAtEnd = await helper.usersInDb();
         expect(usersAtEnd).toHaveLength(usersAtStart.length);
@@ -255,11 +264,13 @@ describe('when there is initially one user in the DB', () => {
             password: 'ty'
         }
 
-        await api
+        const respons = await api
             .post('/api/users')
             .send(newUser)
             .expect(400)
             .expect('Content-Type', /application\/json/)
+
+        expect(respons.text).toMatch(/password must be at least 3 characters/);
 
         const usersAtEnd = await helper.usersInDb();
         expect(usersAtEnd).toHaveLength(usersAtStart.length);
