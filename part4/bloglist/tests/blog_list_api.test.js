@@ -4,6 +4,9 @@ const app = require('../app');
 const api = supertest(app);
 const Blog = require('../models/blog');
 const helper = require('./test_helper');
+const bcrypt = require('bcrypt');
+const User = require('../models/user');
+const { before } = require('lodash');
 
 
 beforeEach(async () => {
@@ -111,7 +114,7 @@ describe('deleting a blog', () => {
         const titles = blogsAtTheEnd.map(blog => blog.title)
         expect(titles).not.toContain(blogToDelete.title);
     })
-})
+}, 100000)
 
 describe('updating a blog', () => {
     test('succeeds with a new number for likes and a valid id', async () => {
@@ -136,6 +139,133 @@ describe('updating a blog', () => {
         expect(updatedBlog.likes).toBe(10);
     })
 }, 100000)
+
+describe('when there is initially one user in the DB', () => {
+    beforeEach(async () => {
+        await User.deleteMany();
+
+        const passwordHash = await bcrypt.hash('sanasala', 10);
+        const user = new User({ username: 'käyttäjä1', passwordHash })
+
+        await user.save()
+    })
+
+    test('creation succeeds with a new username', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            username: 'uusikäyttäjä',
+            name: 'Uusi Käyttäjä',
+            password: 'sanasana'
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length + 1);
+
+        const usernames = usersAtEnd.map(user => user.username);
+        expect(usernames).toContain(newUser.username);
+    }, 100000)
+
+    test('creating a new user fails without a username', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            name: 'Uusi Käyttäjä',
+            password: 'sanasana'
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length);
+    }, 100000)
+
+    test('creating a new user fails with too short username', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            username: "aa",
+            name: 'Uusi Käyttäjä',
+            password: 'sanasana'
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length);
+    }, 100000)
+
+    test('creating a new user fails with already-existing username', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            username: "käyttäjä1",
+            name: 'Uusi Käyttäjä',
+            password: 'sanasana'
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length);
+    }, 100000)
+
+    test('creating a new user fails without a password', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            username: 'asdasd',
+            name: 'Uusi Käyttäjä',
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length);
+    }, 100000)
+
+    test('creating a new user fails without too a short password', async () => {
+        const usersAtStart = await helper.usersInDb();
+
+        const newUser = {
+            username: 'asdasd',
+            name: 'Uusi Käyttäjä',
+            password: 'ty'
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb();
+        expect(usersAtEnd).toHaveLength(usersAtStart.length);
+    }, 100000)
+
+})
 
 afterAll(async () => {
     await mongoose.connection.close();

@@ -16,6 +16,10 @@ lodash library: JS library to work with arrays
 
 express-async-errors: the library allows to eliminate the try-catch blocks.
 
+bcrypt: package for generating the password hashes.
+
+mongoose-unique-validator: library for validations
+
 
 ## dev dependency: 
 nodemon: nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.

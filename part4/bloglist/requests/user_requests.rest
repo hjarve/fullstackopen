@@ -1,0 +1,22 @@
+
+### create a new user
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "uusikäyttäjäx",
+    "name": "Uusi Käyttäjä X",
+    "password": "sanasana"
+}
+
+### create a new user without username
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "name": "Uusi Käyttäjä Y",
+    "password": "sanasana"
+}
+
+### get all users
+GET http://localhost:3003/api/users 
