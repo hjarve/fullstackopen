@@ -49,7 +49,7 @@ describe('adding a new blog', () => {
         expect(titles).toContain('Canonical string reduction')
     }, 100000)
 
-    test('without likes prperty succeeds with a default value zero', async () => {
+    test('without likes property succeeds with a default value zero', async () => {
         const newBlog = {
             title: "First class tests",
             author: "Robert C. Martin",
@@ -96,10 +96,9 @@ describe('adding a new blog', () => {
 })
 
 describe('deleting a blog', () => {
-    test('succeeds with a statis code 204 if id is valid', async () => {
+    test('succeeds with a status code 204 if id is valid', async () => {
         const blogAtStart = await helper.blogsInDb();
         const blogToDelete = blogAtStart[0];
-        console.log(blogToDelete.id);
 
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
@@ -113,6 +112,30 @@ describe('deleting a blog', () => {
         expect(titles).not.toContain(blogToDelete.title);
     })
 })
+
+describe('updating a blog', () => {
+    test('succeeds with a new number for likes and a valid id', async () => {
+        const blogAtStart = await helper.blogsInDb();
+        const firstBlog = blogAtStart[0];
+        const blogToUpdate = {
+            title: firstBlog.title,
+            author: firstBlog.author,
+            url: firstBlog.url,
+            likes: 10
+        }
+
+        await api
+            .put(`/api/blogs/${firstBlog.id}`)
+            .send(blogToUpdate)
+            .expect(200)
+
+        const blogsAtTheEnd = await helper.blogsInDb();
+        expect(blogsAtTheEnd).toHaveLength(helper.initialBlogs.length);
+
+        const updatedBlog = blogsAtTheEnd.find(blog => blog.id === firstBlog.id)
+        expect(updatedBlog.likes).toBe(10);
+    })
+}, 100000)
 
 afterAll(async () => {
     await mongoose.connection.close();
