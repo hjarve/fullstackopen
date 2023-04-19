@@ -20,6 +20,8 @@ bcrypt: package for generating the password hashes.
 
 mongoose-unique-validator: library for validations
 
+jsonwebtoken:  library that allows to generate JSON web tokens.
+
 
 ## dev dependency: 
 nodemon: nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.
