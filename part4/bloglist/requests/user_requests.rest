@@ -9,6 +9,16 @@ Content-Type: application/json
     "password": "sanasana"
 }
 
+### create another
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "käyttäjäy",
+    "name": "Uusi Käyttäjä Y",
+    "password": "sanasala"
+}
+
 ### create a new user without username
 POST http://localhost:3003/api/users
 Content-Type: application/json
