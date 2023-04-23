@@ -12,7 +12,7 @@ Content-Type: application/json
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InV1c2lrw6R5dHTDpGrDpHgiLCJpZCI6IjY0MzkxMWI5Y2QwYmYxNzQ3MDU4ZjAxZSIsImlhdCI6MTY4MjIyMjg2Mn0.-QU3hLWAEeY0kAnQRcLkNRVrjI2hQnmn934G77SWiU8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImvDpHl0dMOkasOkeSIsImlkIjoiNjQ0MDlhYzIyMzQ5OTAxMDJhMzM5ZDBiIiwiaWF0IjoxNjgyMjI4NTMzfQ.SD_HexiF9Oej8FjkYK7WvNCJJOnpNVJmDmnZ-VY3Bp0
 
 {
     "title": "Type wars",

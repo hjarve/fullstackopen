@@ -9,31 +9,54 @@ const User = require('../models/user');
 const { before } = require('lodash');
 const { error } = require('../utils/logger');
 
+const loginUser = async () => {
+    const userToLogIn = {
+        username: helper.userArray[0].username,
+        password: helper.userArray[0].password
+    }
+
+    const loggedInUser = await api.post('/api/login')
+        .send(userToLogIn)
+
+    return loggedInUser.body;
+}
 
 beforeEach(async () => {
     await Blog.deleteMany({});
-    let blogObject = new Blog(helper.initialBlogs[0]);
+    await User.deleteMany({});
+
+    const passwordHash = await bcrypt.hash(helper.userArray[0].password, 10);
+    const user = new User({ username: helper.userArray[0].username, name: helper.userArray[0].name, passwordHash })
+    const savedUser = await user.save();
+
+    let blogObject = new Blog({...helper.initialBlogs[0], user: savedUser._id});
     await blogObject.save();
-    blogObject = new Blog(helper.initialBlogs[1]);
+    blogObject = new Blog({...helper.initialBlogs[1], user: savedUser._id});
     await blogObject.save();
 }, 100000)
 
+
 describe('when there are initially some blogs saved', () => {
     test('2 blogs are returned as json', async () => {
-        const response = await api.get('/api/blogs')
+        const loggedInUser = await loginUser();
+        const response = await api.get('/api/blogs').set('Authorization', `Bearer ${loggedInUser.token}`);
         expect(200)
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body).toHaveLength(helper.initialBlogs.length)
     }, 100000)
 
     test('Unique identifier is named id', async () => {
-        const response = await api.get('/api/blogs')
+        const loggedInUser = await loginUser();
+
+        const response = await api.get('/api/blogs').set('Authorization', `Bearer ${loggedInUser.token}`);
         expect(response.body[0].id).toBeDefined();
     }, 100000)
 })
 
 describe('adding a new blog', () => {
     test('succeeds with a valid new blog', async () => {
+        const loggedInUser = await loginUser();
+
         const newBlog = {
             title: "Canonical string reduction",
             author: "Edsger W. Dijkstra",
@@ -43,6 +66,7 @@ describe('adding a new blog', () => {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${loggedInUser.token}`)
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
@@ -54,6 +78,8 @@ describe('adding a new blog', () => {
     }, 100000)
 
     test('without likes property succeeds with a default value zero', async () => {
+        const loggedInUser = await loginUser();
+
         const newBlog = {
             title: "First class tests",
             author: "Robert C. Martin",
@@ -62,6 +88,7 @@ describe('adding a new blog', () => {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${loggedInUser.token}`)
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
@@ -73,6 +100,8 @@ describe('adding a new blog', () => {
     }, 100000)
 
     test('fails with a status code 400 Bad Request if title is missing', async () => {
+        const loggedInUser = await loginUser();
+
         const newBlog = {
             author: "Edsger W. Dijkstra",
             url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
@@ -81,11 +110,14 @@ describe('adding a new blog', () => {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${loggedInUser.token}`)
             .send(newBlog)
             .expect(400)
     }, 100000)
 
     test('fails with a status code 400 Bad Request if url is missing', async () => {
+        const loggedInUser = await loginUser();
+
         const newBlog = {
             title: "Canonical string reduction",
             author: "Edsger W. Dijkstra",
@@ -94,6 +126,7 @@ describe('adding a new blog', () => {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${loggedInUser.token}`)
             .send(newBlog)
             .expect(400)
     }, 100000)
@@ -101,11 +134,14 @@ describe('adding a new blog', () => {
 
 describe('deleting a blog', () => {
     test('succeeds with a status code 204 if id is valid', async () => {
+        const loggedInUser = await loginUser();
+
         const blogAtStart = await helper.blogsInDb();
         const blogToDelete = blogAtStart[0];
 
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
+            .set('Authorization', `Bearer ${loggedInUser.token}`)
             .expect(204)
 
         const blogsAtTheEnd = await helper.blogsInDb();
@@ -119,6 +155,8 @@ describe('deleting a blog', () => {
 
 describe('updating a blog', () => {
     test('succeeds with a new number for likes and a valid id', async () => {
+        const loggedInUser = await loginUser();
+
         const blogAtStart = await helper.blogsInDb();
         const firstBlog = blogAtStart[0];
         const blogToUpdate = {
@@ -130,6 +168,7 @@ describe('updating a blog', () => {
 
         await api
             .put(`/api/blogs/${firstBlog.id}`)
+            .set('Authorization', `Bearer ${loggedInUser.token}`)
             .send(blogToUpdate)
             .expect(200)
 
@@ -142,22 +181,13 @@ describe('updating a blog', () => {
 }, 100000)
 
 describe('when there is initially one user in the DB', () => {
-    beforeEach(async () => {
-        await User.deleteMany();
-
-        const passwordHash = await bcrypt.hash('sanasala', 10);
-        const user = new User({ username: 'käyttäjä1', passwordHash })
-
-        await user.save()
-    })
-
     test('creation succeeds with a new username', async () => {
         const usersAtStart = await helper.usersInDb();
 
         const newUser = {
-            username: 'uusikäyttäjä',
-            name: 'Uusi Käyttäjä',
-            password: 'sanasana'
+            username: helper.userArray[1].username,
+            name: helper.userArray[1].name,
+            password: helper.userArray[1].password
         }
 
         await api

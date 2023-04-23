@@ -39,9 +39,24 @@ const usersInDb = async () => {
   return users.map(user => user.toJSON());
 }
 
+const userArray= [
+  {
+    username: "käyttäjä1",
+    name: "Käyttäjä 1",
+    password: "sanasala"
+  },
+  {
+    username: "käyttäjä2",
+    name:"Käyttäjä 2",
+    password: "salainen"
+  }
+]
+
+
 module.exports = {
     initialBlogs,
     nonExistingId,
     blogsInDb,
-    usersInDb
+    usersInDb,
+    userArray
 }
