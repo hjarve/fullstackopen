@@ -1,4 +1,4 @@
-
+### add a post without a token
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
@@ -12,7 +12,7 @@ Content-Type: application/json
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InV1c2lrw6R5dHTDpGrDpHgiLCJpYXQiOjE2ODIyMTM5MzZ9.fq5vsQBkjug13oL8GWasW5v2mGlfbqgnP4DlyoWUFhk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InV1c2lrw6R5dHTDpGrDpHgiLCJpZCI6IjY0MzkxMWI5Y2QwYmYxNzQ3MDU4ZjAxZSIsImlhdCI6MTY4MjIyMjg2Mn0.-QU3hLWAEeY0kAnQRcLkNRVrjI2hQnmn934G77SWiU8
 
 {
     "title": "Type wars",
