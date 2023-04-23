@@ -1,9 +1,6 @@
 const blogsRouter = require('express').Router();
-//const { response } = require('../app');
 const Blog = require('../models/blog');
-const User = require('../models/user');
-const jwt = require('jsonwebtoken');
-
+const ObjectId = require('mongoose').Types.ObjectId;
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
@@ -12,14 +9,7 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response, next) => {
     const body = request.body;
-    let decodedToken = null;
-    try{
-      decodedToken = jwt.verify(request.token, process.env.SECRET);
-    }catch(e){
-      return response.status(401).json({ error: e.message })
-    }
-
-    const user = await User.findById(decodedToken.id);
+    const user = request.user
 
     const blog = new Blog({
       title: body.title,
@@ -54,16 +44,14 @@ blogsRouter.put('/:id', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  let decodedToken = null;
-  try{
-    decodedToken = jwt.verify(request.token, process.env.SECRET);
-  }catch(e){
-    return response.status(401).json({ error: e.message })
+  if (!ObjectId.isValid(request.params.id)){
+    return response.status(400).json({ error: "Invalid id"});
   }
 
-  const blogToRemove = await Blog.findById(request.params.id)
-  if(decodedToken.id && blogToRemove){
-    if(decodedToken.id === blogToRemove.user.toString()){
+  const blogToRemove = await Blog.findById(request.params.id);
+
+  if(request.user && blogToRemove){
+    if(request.user._id.toString() === blogToRemove.user.toString()){
     await Blog.findByIdAndRemove(request.params.id);
     response.status(204).end();
     } else {
