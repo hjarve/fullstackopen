@@ -130,6 +130,23 @@ describe('adding a new blog', () => {
             .send(newBlog)
             .expect(400)
     }, 100000)
+
+    test('fails without a token', async () => {
+        const newBlog = {
+            title: "Canonical string reduction",
+            author: "Edsger W. Dijkstra",
+            likes: 12
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(401)
+
+        const blogsAtTheEnd = await helper.blogsInDb();
+
+        expect(blogsAtTheEnd).toHaveLength(helper.initialBlogs.length);
+    }, 100000)
 })
 
 describe('deleting a blog', () => {
@@ -181,7 +198,7 @@ describe('updating a blog', () => {
 }, 100000)
 
 describe('when there is initially one user in the DB', () => {
-    test('creation succeeds with a new username', async () => {
+    test('creating a new user succeeds with a new username', async () => {
         const usersAtStart = await helper.usersInDb();
 
         const newUser = {
