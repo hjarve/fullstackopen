@@ -2,12 +2,14 @@ const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
 const ObjectId = require('mongoose').Types.ObjectId;
 
+const { userExtractor } = require('../utils/middleware');
+
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
   response.json(blogs);
 })
 
-blogsRouter.post('/', async (request, response, next) => {
+blogsRouter.post('/', userExtractor, async (request, response, next) => {
     const body = request.body;
     const user = request.user
 
@@ -43,7 +45,7 @@ blogsRouter.put('/:id', async (request, response) => {
   response.json(updatedBlog);
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   if (!ObjectId.isValid(request.params.id)){
     return response.status(400).json({ error: "Invalid id"});
   }
