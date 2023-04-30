@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
+import Notification from "./components/Notification";
+
 import blogService from './services/blogs';
 import loginService from './services/login';
+
 
 
 const App = () => {
@@ -12,6 +15,8 @@ const App = () => {
   const [blogTitle, setBlogTitle] = useState('');
   const [blogAuthor, setBlogAuthor] = useState('');
   const [blogUrl, setBlogUrl] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState("notification");
+  const [successful, setSuccessful] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then(blogs => 
@@ -26,6 +31,15 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, [])
+
+  const showNotification = (message, successful) => {
+    setNotificationMessage(message);
+    setSuccessful(successful);
+    setTimeout(() => {
+      setNotificationMessage(null)
+      setSuccessful(null);
+    }, 4000);
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -42,6 +56,7 @@ const App = () => {
       setPassword('');
     } catch (exception){
       console.log('Wrong credential');
+      showNotification('Wrong username or password', 0);
     }
   }
 
@@ -54,6 +69,7 @@ const App = () => {
     return(
       <div>
       <h2>log in to the application</h2>
+      <Notification message={notificationMessage} successful={successful}/>
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -94,9 +110,9 @@ const App = () => {
       setBlogTitle('');
       setBlogAuthor('');
       setBlogUrl('');
-      
+      showNotification(`A new blog ${addedBlog.title} by ${addedBlog.author} added`, 1);
     }catch (exception){
-      console.log('something went wrong: ', exception.message);
+      showNotification(exception.response.data.error, 0);
     }
   }
 
@@ -149,6 +165,7 @@ const App = () => {
   return(
     <div>
       <h2>blogs</h2>
+      <Notification message={notificationMessage} successful={successful}/>
       <p>{user.name} logged in <button onClick={() => handleLogout()}>logout</button></p>
       {newBlogForm()}
       {blogs.map(blog =>
