@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Blog = ({blog, handleUpdateBlog}) => {
+const Blog = ({blog, handleUpdateBlog, handleDeleteBlog, user}) => {
     const [showDetails, setShowDetails] = useState(false);
 
     const hideWhenVisible = { display: showDetails ? 'none' : '' };
@@ -23,6 +23,18 @@ const Blog = ({blog, handleUpdateBlog}) => {
       handleUpdateBlog(blogToUpdate);
     }
 
+    const deleteBlog = () => {
+      if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
+        handleDeleteBlog(blog);
+      }
+    }
+
+    const deleteButton = () => {
+      return(
+        <button style={{background: 'pink'}} onClick={deleteBlog}>remove</button>
+      )
+    }
+
     return(
       <div>
         <div style={{...blogStyle, ...hideWhenVisible}}>
@@ -39,6 +51,7 @@ const Blog = ({blog, handleUpdateBlog}) => {
               <button onClick={updateBlog}>like</button>
               </p>
             <p>{blog.user.name}</p> 
+            {blog.user.username === user.username && deleteButton()}
         </div> 
     </div>  
     )

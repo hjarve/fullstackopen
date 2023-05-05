@@ -45,8 +45,6 @@ const App = () => {
 
     try{
       const user = await loginService.login({ username, password, });
-      console.log(user);
-      console.log(user.token);
 
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user));
       setUser(user);
@@ -114,7 +112,17 @@ const App = () => {
   const updateBlog = async blogObject => {
     try{
       let updatedBlog = await blogService.update(blogObject.id, blogObject);
-      setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog));
+      setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : blogObject));
+    }catch(exception){
+      showNotification(exception.response.data.error, 0);
+    }
+  }
+
+  const deleteBlog = async blogObject => {
+    try{
+      await blogService.remove(blogObject.id);
+      setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
+      showNotification(`Blog removed`, 1);
     }catch(exception){
       showNotification(exception.response.data.error, 0);
     }
@@ -142,7 +150,7 @@ const App = () => {
         <BlogForm createBlog={addNewBlog}/>
       </Togglable>
       {blogs.sort(compareLikes).map(blog =>
-        <Blog key={blog.id} blog={blog} handleUpdateBlog={updateBlog}/>
+        <Blog key={blog.id} blog={blog} handleUpdateBlog={updateBlog} handleDeleteBlog={deleteBlog} user={user}/>
       )}
     </div>
   )
