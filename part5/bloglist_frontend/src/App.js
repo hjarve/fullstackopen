@@ -96,6 +96,7 @@ const App = () => {
 
   const addNewBlog = async blogObject => {
     try{
+      console.log(blogs);
       let addedBlog = await blogService.create(blogObject);
       const loggedUser = {
         username: user.username,
@@ -109,6 +110,16 @@ const App = () => {
       showNotification(exception.response.data.error, 0);
     }
   }
+
+  const updateBlog = async blogObject => {
+    try{
+      let updatedBlog = await blogService.update(blogObject.id, blogObject);
+      setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog));
+    }catch(exception){
+      showNotification(exception.response.data.error, 0);
+    }
+  }
+
 
   if (user === null){
     return(
@@ -127,7 +138,7 @@ const App = () => {
         <BlogForm createBlog={addNewBlog}/>
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog}/>
+        <Blog key={blog.id} blog={blog} handleUpdateBlog={updateBlog}/>
       )}
     </div>
   )
