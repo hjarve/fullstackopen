@@ -36,12 +36,12 @@ const Blog = ({ blog, handleUpdateBlog, handleDeleteBlog, user }) => {
   }
 
   return(
-    <div>
+    <div className='blog'>
       <div style={{ ...blogStyle, ...hideWhenVisible }}>
         {blog.title} {blog.author}
         <button onClick={() => setShowDetails(true)}>view</button>
       </div>
-      <div style={{ ...blogStyle, ...showWhenVisible }}>
+      <div style={{ ...blogStyle, ...showWhenVisible }} className='togglableContent'>
         <p>
           {blog.title} {blog.author}
           <button onClick={toggleVisibility}>hide</button>
