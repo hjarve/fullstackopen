@@ -1,6 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Blog from './Blog';
 
 describe('<Blog />', () => {
@@ -33,6 +34,16 @@ describe('<Blog />', () => {
     const div = container.querySelector('.togglableContent');
 
     expect(div).toHaveStyle('display: none');
+  })
+
+  test('should display url and likes when \'view\' button is clicked', async () => {
+    const testUser = userEvent.setup();
+    const button = screen.getByText('view');
+    await testUser.click(button);
+
+    const div = container.querySelector('.togglableContent');
+
+    expect(div).not.toHaveStyle('display: none');
   })
 })
 
