@@ -17,11 +17,15 @@ describe('<Blog />', () => {
     user: user
   }
 
+  const mockHandler = jest.fn();
+
   let container;
 
   beforeEach(() => {
-    container = render(<Blog blog={blog} user={user}/>).container;
+    container = render(<Blog blog={blog} user={user} handleUpdateBlog={mockHandler}/>).container;
   })
+
+  const testUser = userEvent.setup();
 
   test('should by default render title and author of the blog', () => {
 
@@ -37,13 +41,19 @@ describe('<Blog />', () => {
   })
 
   test('should display url and likes when \'view\' button is clicked', async () => {
-    const testUser = userEvent.setup();
     const button = screen.getByText('view');
     await testUser.click(button);
 
     const div = container.querySelector('.togglableContent');
 
     expect(div).not.toHaveStyle('display: none');
+  })
+
+  test('clicking the view button twice calls the event handler twice', async () => {
+    const button = screen.getByText('like');
+    await testUser.click(button);
+    await testUser.click(button);
+    expect(mockHandler.mock.calls).toHaveLength(2);
   })
 })
 
