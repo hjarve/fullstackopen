@@ -26,9 +26,13 @@ describe('<Blog />', () => {
 
     const div = container.querySelector('.blog');
 
-    screen.debug();
-
     expect(div).toHaveTextContent('title of the blog author of the blog');
+  })
+
+  test('should not display url and likes of the blog by defualt', () => {
+    const div = container.querySelector('.togglableContent');
+
+    expect(div).toHaveStyle('display: none');
   })
 })
 
