@@ -1,59 +1,59 @@
-import { useState } from "react";
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const BlogForm = ({ createBlog }) => {
-    const [blogTitle, setBlogTitle] = useState('');
-    const [blogAuthor, setBlogAuthor] = useState('');
-    const [blogUrl, setBlogUrl] = useState('');  
+  const [blogTitle, setBlogTitle] = useState('');
+  const [blogAuthor, setBlogAuthor] = useState('');
+  const [blogUrl, setBlogUrl] = useState('');
 
-    const addBlog = (event) => {
-      event.preventDefault();
-      createBlog({
-        title: blogTitle,
-          author: blogAuthor,
-          url: blogUrl,
-      })
+  const addBlog = (event) => {
+    event.preventDefault();
+    createBlog({
+      title: blogTitle,
+      author: blogAuthor,
+      url: blogUrl,
+    })
 
-      setBlogTitle('');
-      setBlogAuthor('');
-      setBlogUrl('');
-    }
+    setBlogTitle('');
+    setBlogAuthor('');
+    setBlogUrl('');
+  }
 
-    return(
-      <div>
-        <h2>create new</h2>
-        <form onSubmit={addBlog}>
-          <div>
+  return(
+    <div>
+      <h2>create new</h2>
+      <form onSubmit={addBlog}>
+        <div>
             title:
-            <input
+          <input
             type="text"
             value={blogTitle}
             name="title"
-            onChange={({target}) => setBlogTitle(target.value)}
-            />
-          </div>
-          <div>
+            onChange={({ target }) => setBlogTitle(target.value)}
+          />
+        </div>
+        <div>
             author:
-            <input
+          <input
             type="text"
             value={blogAuthor}
             name="author"
-            onChange={({target}) => setBlogAuthor(target.value)}
-            />
-          </div>
-          <div>
+            onChange={({ target }) => setBlogAuthor(target.value)}
+          />
+        </div>
+        <div>
             url:
-            <input
+          <input
             type="text"
             value={blogUrl}
             name="url"
-            onChange={({target}) => setBlogUrl(target.value)}
-            />
-          </div>
-          <button type="submit">create</button>
-        </form>
-      </div>
-    )
+            onChange={({ target }) => setBlogUrl(target.value)}
+          />
+        </div>
+        <button type="submit">create</button>
+      </form>
+    </div>
+  )
 }
 
 BlogForm.propTypes = {

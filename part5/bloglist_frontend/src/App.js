@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import Blog from "./components/Blog";
-import Notification from "./components/Notification";
-import BlogForm from "./components/BlogForm";
-import Togglable from "./components/Togglable";
+import { useState, useEffect, useRef } from 'react';
+import Blog from './components/Blog';
+import Notification from './components/Notification';
+import BlogForm from './components/BlogForm';
+import Togglable from './components/Togglable';
 
 import blogService from './services/blogs';
 import loginService from './services/login';
@@ -18,7 +18,7 @@ const App = () => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then(blogs => 
+    blogService.getAll().then(blogs =>
       setBlogs(blogs));
   }, [])
 
@@ -65,31 +65,31 @@ const App = () => {
   const loginForm = () => {
     return(
       <div>
-      <h2>log in to the application</h2>
-      <Notification message={notificationMessage} successful={successful}/>
-      <form onSubmit={handleLogin}>
-        <div>
+        <h2>log in to the application</h2>
+        <Notification message={notificationMessage} successful={successful}/>
+        <form onSubmit={handleLogin}>
+          <div>
           username
             <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
+              type="text"
+              value={username}
+              name="Username"
+              onChange={({ target }) => setUsername(target.value)}
             />
-        </div>
-        <div>
+          </div>
+          <div>
           password
             <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
+              type="password"
+              value={password}
+              name="Password"
+              onChange={({ target }) => setPassword(target.value)}
             />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
-    ) 
+          </div>
+          <button type="submit">login</button>
+        </form>
+      </div>
+    )
   }
 
   const addNewBlog = async blogObject => {
@@ -100,7 +100,7 @@ const App = () => {
         username: user.username,
         name: user.name,
       }
-      addedBlog = {...addedBlog, ...{user: loggedUser}};
+      addedBlog = { ...addedBlog, ...{ user: loggedUser } };
       setBlogs(blogs.concat(addedBlog));
       showNotification(`A new blog ${addedBlog.title} by ${addedBlog.author} added`, 1);
       blogFormRef.current.toggleVisibility();
@@ -122,7 +122,7 @@ const App = () => {
     try{
       await blogService.remove(blogObject.id);
       setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
-      showNotification(`Blog removed`, 1);
+      showNotification('Blog removed', 1);
     }catch(exception){
       showNotification(exception.response.data.error, 0);
     }
