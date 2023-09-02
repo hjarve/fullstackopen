@@ -25,10 +25,14 @@ describe('Blog app', function() {
       cy.contains('User 1 logged in')
     })
 
-    /*
     it('fails with wrong credentials', function() {
-      // ...
+      cy.get('#username').type('user17')
+      cy.get('#password').type('secretPass0rd')
+      cy.get('#login-button').click()
+
+      cy.contains('Wrong username or password')
+      cy.get('.notification').should('contain', 'Wrong username or password')
+      cy.get('.notification').should('have.css', 'color', 'rgb(255, 0, 0)')
     })
-    */
   })
 })
