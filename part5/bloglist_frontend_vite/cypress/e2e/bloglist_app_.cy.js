@@ -54,6 +54,24 @@ describe('Blog app', function() {
       cy.contains('A new blog new blog title by new blog author added')
       cy.get('#blog-list').should('contain', 'new blog title new blog author')
     })
+
+    describe('when there is a blog post created', function() {
+      beforeEach(function(){
+        cy.get('#new-blog-button').click()
+
+        cy.get('#title').type('new blog title')
+        cy.get('#author').type('new blog author')
+        cy.get('#url').type('www.newblog.com')
+        cy.get('#submit-blog-button').click()
+      })
+
+      it('A user can like a blog', function() {
+        cy.contains('new blog title new blog author').contains('view').click()
+        cy.contains('new blog title new blog author').parent().find('#like-button').click()
+        
+        cy.contains('new blog title new blog author').parent().contains('likes 1')
+      })
+    })
   })
   
 
