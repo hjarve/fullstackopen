@@ -71,6 +71,13 @@ describe('Blog app', function() {
         
         cy.contains('new blog title new blog author').parent().contains('likes 1')
       })
+
+      it('A user who created a blog can delete it', function() {
+        cy.contains('new blog title new blog author').contains('view').click()
+        cy.contains('new blog title new blog author').parent().find('#remove-button').click()
+
+        cy.contains('new blog title new blog author').should('not.exist')
+      })
     })
   })
   

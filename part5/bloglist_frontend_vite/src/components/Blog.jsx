@@ -31,7 +31,7 @@ const Blog = ({ blog, handleUpdateBlog, handleDeleteBlog, user }) => {
 
   const deleteButton = () => {
     return(
-      <button style={{ background: 'pink' }} onClick={deleteBlog}>remove</button>
+      <button id='remove-button' style={{ background: 'pink' }} onClick={deleteBlog}>remove</button>
     )
   }
 
