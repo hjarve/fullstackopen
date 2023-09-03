@@ -35,4 +35,26 @@ describe('Blog app', function() {
       cy.get('.notification').should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+  
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.get('#username').type('user1')
+      cy.get('#password').type('secretPass0rd')
+      cy.get('#login-button').click()
+    })
+
+    it('A blog can be created', function() {
+      cy.get('#new-blog-button').click()
+
+      cy.get('#title').type('new blog title')
+      cy.get('#author').type('new blog author')
+      cy.get('#url').type('www.newblog.com')
+      cy.get('#submit-blog-button').click()
+
+      cy.contains('A new blog new blog title by new blog author added')
+      cy.get('#blog-list').should('contain', 'new blog title new blog author')
+    })
+  })
+  
+
 })

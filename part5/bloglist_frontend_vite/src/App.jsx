@@ -148,12 +148,14 @@ const App = () => {
       <h2>blogs</h2>
       <Notification message={notificationMessage} successful={successful}/>
       <p>{user.name} logged in <button onClick={() => handleLogout()}>logout</button></p>
-      <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
+      <Togglable buttonId={'new-blog-button'} buttonLabel={'new blog'} ref={blogFormRef}>
         <BlogForm createBlog={addNewBlog}/>
       </Togglable>
-      {blogs.sort(compareLikes).map(blog =>
-        <Blog key={blog.id} blog={blog} handleUpdateBlog={updateBlog} handleDeleteBlog={deleteBlog} user={user}/>
-      )}
+      <div id='blog-list'>
+        {blogs.sort(compareLikes).map(blog =>
+          <Blog key={blog.id} blog={blog} handleUpdateBlog={updateBlog} handleDeleteBlog={deleteBlog} user={user}/>
+        )}
+      </div>
     </div>
   )
 }
