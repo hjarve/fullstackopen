@@ -1,3 +1,5 @@
+import { func } from "prop-types";
+
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
@@ -77,6 +79,24 @@ describe('Blog app', function() {
         cy.contains('new blog title new blog author').parent().find('#remove-button').click()
 
         cy.contains('new blog title new blog author').should('not.exist')
+      })
+
+      it('Only the creator of a blog post can see its remove button', function() {
+        const user2 = {
+          name: 'User 2',
+          username: 'user2',
+          password: 'secretPass0rd'
+        }
+        cy.request('POST', 'http://localhost:3003/api/users/', user2);
+
+        cy.get('#logout-button').click()
+
+        cy.get('#username').type('user2')
+        cy.get('#password').type('secretPass0rd')
+        cy.get('#login-button').click()
+
+        cy.contains('new blog title new blog author').contains('view').click()
+        cy.contains('new blog title new blog author').parent().should('not.contain', 'remove')
       })
     })
   })
