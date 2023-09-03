@@ -98,6 +98,41 @@ describe('Blog app', function() {
         cy.contains('new blog title new blog author').contains('view').click()
         cy.contains('new blog title new blog author').parent().should('not.contain', 'remove')
       })
+
+      it('The blogs are ordered according to the number of likes', function() {
+        cy.get('#new-blog-button').click()
+        cy.get('#title').type('new blog title 2')
+        cy.get('#author').type('new blog author 2')
+        cy.get('#url').type('www.newblog2.com')
+        cy.get('#submit-blog-button').click()
+
+        cy.get('#new-blog-button').click()
+        cy.get('#title').type('new blog title 3')
+        cy.get('#author').type('new blog author 3')
+        cy.get('#url').type('www.newblog3.com')
+        cy.get('#submit-blog-button').click()
+
+        cy.contains('new blog title new blog author').contains('view').click()
+        cy.contains('new blog title new blog author').parent().find('#like-button').click()
+
+        cy.contains('new blog title 2 new blog author 2').contains('view').click()
+        cy.contains('new blog title 2 new blog author 2').parent().find('#like-button').as('likeButton2')
+        cy.get('@likeButton2').click()
+        cy.contains('new blog title 2 new blog author 2').parent().contains('likes 1')
+        cy.get('@likeButton2').click()
+        cy.contains('new blog title 2 new blog author 2').parent().contains('likes 2')
+        cy.get('@likeButton2').click()
+
+        cy.contains('new blog title 3 new blog author 3').contains('view').click()
+        cy.contains('new blog title 3 new blog author 3').parent().find('#like-button').as('likeButton3')
+        cy.get('@likeButton3').click()
+        cy.contains('new blog title 3 new blog author 3').parent().contains('likes 1')
+        cy.get('@likeButton3').click()
+
+        cy.get('.blog').eq(0).should('contain', 'new blog title 2 new blog author 2')
+        cy.get('.blog').eq(1).should('contain', 'new blog title 3 new blog author 3')
+        cy.get('.blog').eq(2).should('contain', 'new blog title new blog author')
+      })
     })
   })
   
