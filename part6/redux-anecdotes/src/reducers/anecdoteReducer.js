@@ -26,10 +26,12 @@ const reducer = (state = initialState, action) => {
   switch(action.type){
     case('VOTE'):
       const id = action.payload.id
-      return state.map(anecdote => anecdote.id === id ? {...anecdote, votes: anecdote.votes + 1} : anecdote)
+      const newState = state.map(anecdote => anecdote.id === id ? {...anecdote, votes: anecdote.votes + 1} : anecdote)
+      function compareFn(a, b) {return b.votes - a.votes}
+      return newState.toSorted(compareFn);
     case('ADD'):
       const newAnecdote = asObject(action.payload.anecdote);
-      return state.concat(newAnecdote);
+      return state.concat(newAnecdote); 
 
     default: return state;
   }
