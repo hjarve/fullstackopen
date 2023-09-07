@@ -1,10 +1,17 @@
+import { useNotificationDispatch } from "../NotificationContext"
+
 const AnecdoteForm = ({addAnecdote}) => {
+  const notificationDispatch = useNotificationDispatch();
 
   const onCreate = async (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
     addAnecdote.mutate({content, votes: 0});
+    notificationDispatch({ message: `You added ${content}`, type: 'SHOW'})
+    setTimeout(() => {
+      notificationDispatch({type: 'CLEAR'})
+    }, 5000)
 }
 
   return (
