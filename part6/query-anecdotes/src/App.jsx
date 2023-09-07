@@ -7,12 +7,17 @@ const App = () => {
 
   const result = useQuery({
     queryKey: ['anecdotes'],
-    queryFn: () => axios.get('http://localhost:3001/anecdotes').then(res => res.data)
+    queryFn: () => axios.get('http://localhost:3001/anecdotes').then(res => res.data),
+    retry: 1
   })
   console.log(JSON.parse(JSON.stringify(result)));
 
   if ( result.isLoading ) {
     return <div>loading data</div>
+  }
+
+  if ( result.isError ){
+    return <div>Anecdote service not available due to problems in server</div>
   }
 
   const anecdotes = result.data;
