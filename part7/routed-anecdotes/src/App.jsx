@@ -79,6 +79,11 @@ const CreateNew = (props) => {
       votes: 0
     })
     navigate('/');
+    props.setNotification(`A new anecdote ${content} created!`);
+    setTimeout(() => {
+      props.setNotification('');
+    }, 5000)
+
   }
 
   return (
@@ -102,6 +107,19 @@ const CreateNew = (props) => {
     </div>
   )
 
+}
+
+const Notification = ({message}) => {
+  const style = {
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 5,
+  }
+  return (
+    <div style={message === '' ? null : style}>
+      {message}
+    </div>
+  )
 }
 
 const App = () => {
@@ -146,10 +164,11 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
+      <Notification message={notification}/>
       <Menu />
       <Routes>
         <Route path='/anecdotes/:id' element={<Anecdote anecdotes={anecdotes}/>}/>
-        <Route path='/createnew' element={<CreateNew addNew={addNew}/>}/>
+        <Route path='/createnew' element={<CreateNew addNew={addNew} setNotification={setNotification}/>}/>
         <Route path='/about' element={<About />}/>
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />}/>
       </Routes>
