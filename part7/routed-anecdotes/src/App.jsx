@@ -81,7 +81,13 @@ const CreateNew = (props) => {
     setTimeout(() => {
       props.setNotification('');
     }, 5000)
+  }
 
+  const handleReset = (e) => {
+    e.preventDefault();
+    content.onReset();
+    author.onReset();
+    info.onReset();
   }
 
   return (
@@ -101,6 +107,7 @@ const CreateNew = (props) => {
           <input name='info' value={info.value} onChange={info.onChange} />
         </div>
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
