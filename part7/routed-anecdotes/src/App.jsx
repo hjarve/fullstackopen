@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate, useMatch } from 'react-router-dom';
+import { useField } from './hooks';
 
 const Menu = () => {
   const padding = {
@@ -21,8 +22,7 @@ const Anecdote = ({anecdote}) => {
         {anecdote.content} by {anecdote.author}
       </h2>
       <p>has {anecdote.votes} votes</p>
-      for more info see 
-      <a href={anecdote.info}>{anecdote.info}</a>
+      for more info see <a href={anecdote.info}>{anecdote.info}</a>
     </div>
   )
 }
@@ -63,21 +63,21 @@ const Footer = () => (
 
 const CreateNew = (props) => {
   const navigate = useNavigate();
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
 
+  const content = useField('text');
+  const author = useField('text');
+  const info = useField('text');
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
     navigate('/');
-    props.setNotification(`A new anecdote ${content} created!`);
+    props.setNotification(`A new anecdote ${content.value} created!`);
     setTimeout(() => {
       props.setNotification('');
     }, 5000)
@@ -90,15 +90,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input name='content' value={content.value} onChange={content.onChange} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input name='author' value={author.value} onChange={author.onChange} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input name='info' value={info.value} onChange={info.onChange} />
         </div>
         <button>create</button>
       </form>
