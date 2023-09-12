@@ -18,7 +18,12 @@ const useField = (type) => {
 const useResource = (baseUrl) => {
   const [resources, setResources] = useState([])
 
-  // ...
+  useEffect(() => {
+    axios.get(baseUrl).then(response => setResources(response.data))
+      .catch(function (error){
+        console.log(error);
+      })
+  }, [])
 
   const create = (resource) => {
     // ...
@@ -38,8 +43,8 @@ const App = () => {
   const name = useField('text')
   const number = useField('text')
 
-  const [notes, noteService] = useResource('http://localhost:3005/notes')
-  const [persons, personService] = useResource('http://localhost:3005/persons')
+  const [notes, noteService] = useResource('http://localhost:3005/api/notes')
+  const [persons, personService] = useResource('http://localhost:3005/api/persons')
 
   const handleNoteSubmit = (event) => {
     event.preventDefault()
