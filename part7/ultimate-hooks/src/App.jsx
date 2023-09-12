@@ -26,7 +26,7 @@ const useResource = (baseUrl) => {
   }, [])
 
   const create = (resource) => {
-    // ...
+    axios.post(baseUrl, resource).then(response => setResources(resources.concat(response.data)));
   }
 
   const service = {
