@@ -1,3 +1,5 @@
+import SetBirthYear from "./SetBirthYear"
+
 const Authors = (props) => {
   
   if (!props.show) {
@@ -24,6 +26,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+      <SetBirthYear/>
     </div>
   )
 }
