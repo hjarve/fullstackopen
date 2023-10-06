@@ -1,19 +1,21 @@
 import { useState } from "react"
 import { EDIT_BORN } from "../queries"
 import { useMutation } from "@apollo/client"
+import Select from 'react-select';
 
-const SetBirthYear = () => {
-  const [name, setName] = useState('')
+const SetBirthYear = ({authors}) => {
+  const options = authors.map(a =>{ return {value: a.name, label: a.name}})
+
+  const [selectedOption, setSelectedOption] = useState(null)
   const [born, setBorn] = useState('')
 
   const [ editBorn ] = useMutation(EDIT_BORN)
 
   const submit = async (event) => {
   event.preventDefault()
-  console.log(name, born);
 
-  editBorn({variables: {name, born: Number(born)}})
-  setName('')
+  editBorn({variables: {name: selectedOption.value, born: Number(born)}})
+  setSelectedOption(null)
   setBorn('')
   }
 
@@ -23,9 +25,10 @@ const SetBirthYear = () => {
       <form onSubmit={submit}>
         <div>
           name
-          <input 
-            value={name}
-            onChange={({target}) => setName(target.value)}
+          <Select
+            defaulValue={selectedOption}
+            onChange={setSelectedOption}
+            options={options}
           />
         </div>
         <div>
