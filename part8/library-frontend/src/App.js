@@ -5,8 +5,6 @@ import NewBook from './components/NewBook'
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from './queries'
 
-
-
 const App = () => {
   const [page, setPage] = useState('authors')
 
