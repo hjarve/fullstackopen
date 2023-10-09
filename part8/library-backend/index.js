@@ -213,7 +213,16 @@ const resolvers = {
       }
       return Book.findOne({title: args.title}).populate('author', {name: 1, born:1})
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if ( !currentUser ) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        })
+      }
+      
       const author = await Author.findOne({ name: args.name})
       author.born = args.setBornTo
       return author.save()
