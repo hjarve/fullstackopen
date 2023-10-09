@@ -172,7 +172,15 @@ const resolvers = {
     bookCount: (root) => books.filter(b => b.author === root.name).length
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if ( !currentUser ) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        })
+      }
       const author = await Author.findOne({ name: args.author})
       let newBook
       if(!author) {
