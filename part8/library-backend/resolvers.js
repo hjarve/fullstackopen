@@ -3,6 +3,9 @@ const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
 const { GraphQLError } = require('graphql')
+const  { PubSub } = require('graphql-subscriptions')
+
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -65,7 +68,12 @@ const resolvers = {
           }
         })
       }
-      return Book.findOne({title: args.title}).populate('author', {name: 1, born:1})
+
+      const savedBook = await Book.findOne({title: args.title}).populate('author', {name: 1, born:1})
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
+
+      return savedBook
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
@@ -111,6 +119,11 @@ const resolvers = {
       }
 
       return {value: jwt.sign(userForToken, process.env.JWT_SECRET)}
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator('BOOK_ADDED')
     },
   },
 }

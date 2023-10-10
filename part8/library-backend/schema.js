@@ -20,7 +20,7 @@ const typeDefs = `
   type Token {
     value: String!
   }
-  
+
   type Query {
     bookCount: Int!
     authorCount: Int!
@@ -48,6 +48,10 @@ const typeDefs = `
       username: String!
       password: String!
     ): Token
+  }
+
+  type Subscription {
+    bookAdded: Book!
   }
 `
 
