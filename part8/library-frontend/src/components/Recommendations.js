@@ -12,6 +12,7 @@ const Recommendations = ({show}) => {
 
   const bookResult = useQuery(ALL_BOOKS, {
     skip: !show,
+    variables: {genre: null}
   })
   
   
