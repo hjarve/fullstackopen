@@ -6,14 +6,15 @@ const Recommendations = ({show}) => {
   const [recommended, setRecommended] = useState([])
   const [favGenre, setFavGenre] = useState('')
 
-  const bookResult = useQuery(ALL_BOOKS, {
-    skip: !show
-  })
-
   const userResult = useQuery(ME, {
-    skip: !show
-  })
+    skip: !show,
+  }) 
 
+  const bookResult = useQuery(ALL_BOOKS, {
+    skip: !show,
+  })
+  
+  
   useEffect(() => {
     if ( bookResult.data && userResult.data ){
       setFavGenre(userResult.data.me.favoriteGenre)

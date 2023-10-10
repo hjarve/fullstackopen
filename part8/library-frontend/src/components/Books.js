@@ -12,21 +12,23 @@ const Books = (props) => {
     skip: !props.show
   })
 
-useEffect(() => {
-  if ( result.data ){
-    setBooks(result.data.allBooks)
-    setChosenBooks(result.data.allBooks)
-    let genresArr = []
-    result.data.allBooks.map(b => genresArr = genresArr.concat(b.genres))
-    const genreSet = [...new Set(genresArr), 'all' ]
-    setGenres(genreSet)
-  }
-}, [result.data])
+  useEffect(() => {
+    if ( result.data ){
+      setBooks(result.data.allBooks)
+      setChosenBooks(result.data.allBooks)
+      let genresArr = []
+      result.data.allBooks.map(b => genresArr = genresArr.concat(b.genres))
+      const genreSet = [...new Set(genresArr), 'all' ]
+      setGenres(genreSet)
+    }
+  }, [result.data])
 
-useEffect(() => {
-  if(chosenGenre === 'all') setChosenBooks(books)
-  else setChosenBooks(books.filter(b => b.genres.includes(chosenGenre)))
-}, [chosenGenre])
+
+  useEffect(() => {
+    if(chosenGenre === 'all') setChosenBooks(books)
+    else setChosenBooks(books.filter(b => b.genres.includes(chosenGenre)))
+  }, [chosenGenre])
+
 
   if (!props.show) {
     return null

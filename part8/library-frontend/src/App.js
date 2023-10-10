@@ -18,7 +18,7 @@ const App = () => {
     localStorage.clear()
     client.resetStore()
   }
-  
+
   if (result.loading ) {
     return <div>loading...</div>
   }
