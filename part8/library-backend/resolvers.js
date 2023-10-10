@@ -17,15 +17,22 @@ const resolvers = {
       }
       return Book.find({}).populate('author', {name: 1, born: 1})
     },
-    allAuthors: async (root, args) => {return Author.find({})},
+    allAuthors: async (root, args) => {
+       const authors = await Author.find({})
+       const books = await Book.find({})
+       const authorsWithBookCount = authors.map(a => {
+        const bookCount = books.filter(b => b.author.toString() === a._id.toString()).length
+        return {
+          name: a.name,
+          born: a.born,
+          id: a._id,
+          bookCount: bookCount
+        }
+       })
+       return authorsWithBookCount
+    },
     me: (root, args, context) => {
       return context.currentUser
-    }
-  },
-  Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({}).populate('author', {name: 1})
-      return books.filter(b => b.author.name === root.name).length
     }
   },
   Mutation: {

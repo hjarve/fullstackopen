@@ -31,58 +31,60 @@ mongoose.connect(MONGODB_URI)
     console.log('error connecting to MongoDb:', error.message);
   })
 
-  const start = async () => {
-    const app = express()
-    const httpServer = http.createServer(app)
+mongoose.set('debug', true)
 
-    const wsServer = new WebSocketServer({
-      server: httpServer,
-      path: '/',
-    })
+const start = async () => {
+  const app = express()
+  const httpServer = http.createServer(app)
 
-    const schema = makeExecutableSchema({ typeDefs, resolvers })
-    const serverCleanup = useServer({ schema }, wsServer)
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/',
+  })
 
-    const server = new ApolloServer({
-      schema: schema,
-      plugins: [
-        ApolloServerPluginDrainHttpServer({ httpServer }),
-        {
-          async serverWillStart() {
-            return {
-              async drainServer() {
-                await serverCleanup.dispose();
-              },
-            };
-          },
+  const schema = makeExecutableSchema({ typeDefs, resolvers })
+  const serverCleanup = useServer({ schema }, wsServer)
+
+  const server = new ApolloServer({
+    schema: schema,
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
         },
-      ],
-    })
+      },
+    ],
+  })
 
-    await server.start()
+  await server.start()
 
-    app.use(
-      '/',
-      cors(),
-      express.json(),
-      expressMiddleware(server, {
-        context: async ({ req }) => {
-          const auth = req ? req.headers.authorization : null
-          if ( auth && auth.startsWith('Bearer ')) {
-            const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
-            const currentUser = await User.findById(decodedToken.id).populate('favoriteGenre')
-            return { currentUser }
-          }
-        },
-      }),
-    )
+  app.use(
+    '/',
+    cors(),
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        const auth = req ? req.headers.authorization : null
+        if ( auth && auth.startsWith('Bearer ')) {
+          const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
+          const currentUser = await User.findById(decodedToken.id).populate('favoriteGenre')
+          return { currentUser }
+        }
+      },
+    }),
+  )
 
-    const PORT = 4000
+  const PORT = 4000
 
-    httpServer.listen(PORT, () => {
-      console.log(`Server is now running on http://localhost:${PORT}`);
-    })
+  httpServer.listen(PORT, () => {
+    console.log(`Server is now running on http://localhost:${PORT}`);
+  })
 
-  }
+}
 
-  start()
+start()
