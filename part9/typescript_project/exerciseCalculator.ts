@@ -41,4 +41,8 @@ const calculateExercises = (dailyHours: number[], origTarget: number): ReturnObj
   });
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+const target: number = Number(process.argv[2])
+const daysString: string[] = process.argv.slice(3);
+const days: number[] = daysString.map(d => Number(d));
+
+console.log(calculateExercises(days, target));
