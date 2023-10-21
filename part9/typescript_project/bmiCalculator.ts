@@ -3,7 +3,7 @@ interface parsedArgs {
   value2: number
 }
 
-const parseArgs = (args: string[]): parsedArgs => {
+export const parseArgs = (args: string[]): parsedArgs => {
   if (args.length < 4 ) throw new Error('Not enough arguments')
   if ( args.length > 4 ) throw new Error('Too many argumnets');
   if ( !isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
