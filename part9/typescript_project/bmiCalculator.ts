@@ -1,15 +1,23 @@
+interface parsedArgs {
+  value1: number;
+  value2: number
+}
+
+const parseArgs = (args: string[]): parsedArgs => {
+  if (args.length < 4 ) throw new Error('Not enough arguments')
+  if ( args.length > 4 ) throw new Error('Too many argumnets');
+  if ( !isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    const value1 = Number(args[2]);
+    const value2 = Number(args[3]);
+    if ( value1 <= 0 || value2 <= 0) throw new Error('Height and weight must be greater than zero!');
+    return { value1, value2 };
+  } else throw new Error('Provided values must are not numbers!');
+}
 
 const calculateBmi = (heightInCm: number, weightInKg: number): string  => {
-  if ( isNaN(heightInCm) || isNaN(weightInKg)) {
-    throw new Error('Height and weight must be numbers!');
-  }
-  if ( heightInCm <= 0 || weightInKg <= 0 ) {
-    throw new Error('Height and weight must be greater than zero!')
-  }
-  
   const bmi = weightInKg/((heightInCm/100) ** 2)
   if ( bmi < 18.5 ){
-    return 'undeweight'
+    return 'underweight'
   } else if ( bmi > 24.9 ) {
     if( bmi < 30 ){
       return 'overweight'
@@ -20,11 +28,10 @@ const calculateBmi = (heightInCm: number, weightInKg: number): string  => {
   }
 }
 
-const heightInCm: number = Number(process.argv[2]);
-const weightInKg: number = Number(process.argv[3]);
 
 try{
-  console.log(calculateBmi(heightInCm, weightInKg));
+  const { value1, value2 } = parseArgs(process.argv);
+  console.log(calculateBmi(value1, value2));
 } catch ( error: unknown) {
   let errorMessage = 'There is an error: ';
   if ( error instanceof Error ) {
