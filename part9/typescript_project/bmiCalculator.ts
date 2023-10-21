@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils/isNotNumber";
+
 interface parsedArgs {
   value1: number;
   value2: number
@@ -6,7 +8,7 @@ interface parsedArgs {
 export const parseArgs = (args: string[]): parsedArgs => {
   if (args.length < 4 ) throw new Error('Not enough arguments')
   if ( args.length > 4 ) throw new Error('Too many argumnets');
-  if ( !isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+  if ( !isNotNumber(args[2]) && !isNotNumber(args[3])) {
     const value1 = Number(args[2]);
     const value2 = Number(args[3]);
     if ( value1 <= 0 || value2 <= 0) throw new Error('Height and weight must be greater than zero!');
@@ -14,7 +16,7 @@ export const parseArgs = (args: string[]): parsedArgs => {
   } else throw new Error('Provided values must are not numbers!');
 }
 
-const calculateBmi = (heightInCm: number, weightInKg: number): string  => {
+export const calculateBmi = (heightInCm: number, weightInKg: number): string  => {
   const bmi = weightInKg/((heightInCm/100) ** 2)
   if ( bmi < 18.5 ){
     return 'underweight'

@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils/isNotNumber";
+
 interface ReturnObj {
   periodLength: number;
   trainingDays: number;
@@ -18,7 +20,7 @@ const parseArgs = (args: string[]) : exerciseValues => {
   const value1 = Number(args[2]);
   const value2String = args.slice(3);
   const value2 = value2String.map(d => Number(d));
-  if ( isNaN(value1) || value2.some((value) => isNaN(value))) {
+  if ( isNotNumber(value1) || value2.some((value) => isNotNumber(value))) {
     throw new Error('All the parameters must be numbers!');
   }
   if (value1 <= 0 ) {
@@ -30,7 +32,7 @@ const parseArgs = (args: string[]) : exerciseValues => {
   return { value1, value2 };
 }
 
-const calculateExercises = (dailyHours: number[], origTarget: number): ReturnObj => {
+export const calculateExercises = (dailyHours: number[], origTarget: number): ReturnObj => {
   const periodLength= dailyHours.length;
   let trainingDays = 0;
   dailyHours.map(d => d > 0 ? trainingDays+=1 : null)
