@@ -25,6 +25,14 @@ const Part = ({coursePart}: {coursePart: CoursePart}) => {
           <p>{coursePart.backgroundMaterial}</p>
         </div>
       )
+    case "special":
+      return(
+        <div>
+          <h4>{coursePart.name} {coursePart.exerciseCount}</h4>
+          <i>{coursePart.description}</i>
+          <p>required skills: {coursePart.requirements.join(', ')}</p>
+        </div>
+      )
     default:
       return assertNever(coursePart);
   }
