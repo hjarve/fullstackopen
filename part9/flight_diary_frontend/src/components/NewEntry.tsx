@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { NonSensitiveDiaryEntry } from "../types";
 import { createEntry } from "../services/diaryService";
+import Notification from "./Notification";
+import axios from 'axios';
 
 interface NewEntryProps {
   diaryEntries: NonSensitiveDiaryEntry[];
@@ -13,10 +15,17 @@ const NewEntry = ({diaryEntries, setDiaryEntries}: NewEntryProps) => {
   const [visibility, setVisibility] = useState('');
   const [weather, setWeather] = useState('');
   const [comment, setComment] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const showErrorMessage = (message: string) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 5000);
+  }
 
   const onSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    console.log(date);
     const entryToAdd = {
       date,
       visibility,
@@ -24,24 +33,34 @@ const NewEntry = ({diaryEntries, setDiaryEntries}: NewEntryProps) => {
       comment
     }
 
+
     createEntry(entryToAdd).then(data => {
-      setDiaryEntries(diaryEntries.concat({
+      if ( data ) {
+        setDiaryEntries(diaryEntries.concat({
         id: data.id,
         date: data.date,
         visibility: data.visibility,
         weather: data.weather
       }))
-    })
-
-    setDate('');
-    setVisibility('');
-    setWeather('');
-    setComment('');
+      setDate('');
+      setVisibility('');
+      setWeather('');
+      setComment('');
+      }
+    }).catch((error) => {
+      if(axios.isAxiosError(error)){
+        showErrorMessage(error.response?.data) ;
+      }
+      console.log(error);
+    }) 
+      
+    
   }
 
   return(
     <div>
       <h2>Add a new entry</h2>
+      <Notification message={errorMessage}/>
       <form onSubmit={onSubmit}>
         <div> date
           <input

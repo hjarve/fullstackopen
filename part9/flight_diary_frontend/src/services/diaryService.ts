@@ -10,7 +10,15 @@ export const getAllEntries = () => {
 }
 
 export const createEntry = (object: NewDiaryEntry) => {
-  return axios
+    return axios
     .post<DiaryEntry>(baseUrl, object)
-    .then(response => response.data);
+    .then(response => response.data)
+    .catch((error) => {
+      if(axios.isAxiosError(error)) {
+        throw error;
+      } else {
+        console.log(error);
+      }
+    })
+
 }
